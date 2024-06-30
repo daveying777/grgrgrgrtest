@@ -28,17 +28,17 @@ function calculateGradients() {
     }
 
     const [r, g, b] = hexToRgb(hexInput);
-    const avgRgb = (r + g + b) / 3;
-    const baseChangeValue = avgRgb * scalingFactor;
-    const dominanceR = r / 255;
-    const dominanceG = g / 255;
-    const dominanceB = b / 255;
-    const inverseDominanceR = 1 - dominanceR;
-    const inverseDominanceG = 1 - dominanceG;
-    const inverseDominanceB = 1 - dominanceB;
-    const changeR = baseChangeValue * inverseDominanceR;
-    const changeG = baseChangeValue * inverseDominanceG;
-    const changeB = baseChangeValue * inverseDominanceB;
+    const avgRgb = Math.round((r + g + b) / 3);
+    const baseChangeValue = Math.round(avgRgb * scalingFactor);
+    const dominanceR = Math.round((r / 255) * 1000) / 1000;
+    const dominanceG = Math.round((g / 255) * 1000) / 1000;
+    const dominanceB = Math.round((b / 255) * 1000) / 1000;
+    const inverseDominanceR = Math.round((1 - dominanceR) * 1000) / 1000;
+    const inverseDominanceG = Math.round((1 - dominanceG) * 1000) / 1000;
+    const inverseDominanceB = Math.round((1 - dominanceB) * 1000) / 1000;
+    const changeR = Math.round(baseChangeValue * inverseDominanceR);
+    const changeG = Math.round(baseChangeValue * inverseDominanceG);
+    const changeB = Math.round(baseChangeValue * inverseDominanceB);
 
     const permutations = [
         {R: changeR, G: changeG, B: changeB},
@@ -103,19 +103,19 @@ function calculateGradients() {
         const header = document.createElement('thead');
         header.innerHTML = `
             <tr>
-                <th colspan="4">Permutation ${index + 1}: {'R': ${perm.R.toFixed(2)}, 'G': ${perm.G.toFixed(2)}, 'B': ${perm.B.toFixed(2)}}</th>
-            </tr>
-            <tr>
                 <th>Percentage</th>
-                <th>Hex</th>
-                <th>R G B</th>
-                <th>ΔR ΔG ΔB</th>
+                <th>R</th>
+                <th>G</th>
+                <th>B</th>
+                <th>ΔR</th>
+                <th>ΔG</th>
+                <th>ΔB</th>
             </tr>`;
         table.appendChild(header);
 
         const body = document.createElement('tbody');
 
-        const steps = 7;
+        const steps = 6; // 6 steps between the start and end colors
         const stepPercentage = 100 / steps;
         const deltaR = (endR - r) / steps;
         const deltaG = (endG - g) / steps;
@@ -129,9 +129,12 @@ function calculateGradients() {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${Math.round(stepPercentage * i)}%</td>
-                <td>${hex}</td>
-                <td>${stepR} ${stepG} ${stepB}</td>
-                <td>${(deltaR * i).toFixed(2)} ${(deltaG * i).toFixed(2)} ${(deltaB * i).toFixed(2)}</td>`;
+                <td>${stepR}</td>
+                <td>${stepG}</td>
+                <td>${stepB}</td>
+                <td>${(deltaR * i).toFixed(2)}</td>
+                <td>${(deltaG * i).toFixed(2)}</td>
+                <td>${(deltaB * i).toFixed(2)}</td>`;
             body.appendChild(row);
         }
 
