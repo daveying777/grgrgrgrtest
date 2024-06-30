@@ -1,7 +1,6 @@
 document.getElementById('calculateButton').addEventListener('click', calculateGradients);
 
 function hexToRgb(hex) {
-    console.log('hexToRgb called with hex:', hex);
     if (hex.startsWith('#')) {
         hex = hex.slice(1);
     }
@@ -12,7 +11,6 @@ function hexToRgb(hex) {
     const r = (bigint >> 16) & 255;
     const g = (bigint >> 8) & 255;
     const b = bigint & 255;
-    console.log('hexToRgb result:', [r, g, b]);
     return [r, g, b];
 }
 
@@ -21,11 +19,8 @@ function rgbToHex(r, g, b) {
 }
 
 function calculateGradients() {
-    console.log('calculateGradients called');
     const hexInput = document.getElementById('hexInput').value;
     const scalingFactor = parseFloat(document.getElementById('scalingFactor').value);
-    console.log('hexInput:', hexInput);
-    console.log('scalingFactor:', scalingFactor);
 
     if (!/^#([0-9A-F]{3}){1,2}$/i.test(hexInput)) {
         alert("Please enter a valid hex color code.");
@@ -33,27 +28,17 @@ function calculateGradients() {
     }
 
     const [r, g, b] = hexToRgb(hexInput);
-    console.log('RGB values:', [r, g, b]);
-
     const avgRgb = (r + g + b) / 3;
     const baseChangeValue = avgRgb * scalingFactor;
-    console.log('avgRgb:', avgRgb);
-    console.log('baseChangeValue:', baseChangeValue);
-
     const dominanceR = r / 255;
     const dominanceG = g / 255;
     const dominanceB = b / 255;
-    console.log('dominance:', [dominanceR, dominanceG, dominanceB]);
-
     const inverseDominanceR = 1 - dominanceR;
     const inverseDominanceG = 1 - dominanceG;
     const inverseDominanceB = 1 - dominanceB;
-    console.log('inverseDominance:', [inverseDominanceR, inverseDominanceG, inverseDominanceB]);
-
     const changeR = baseChangeValue * inverseDominanceR;
     const changeG = baseChangeValue * inverseDominanceG;
     const changeB = baseChangeValue * inverseDominanceB;
-    console.log('change values:', [changeR, changeG, changeB]);
 
     const permutations = [
         {R: changeR, G: changeG, B: changeB},
@@ -65,16 +50,40 @@ function calculateGradients() {
         {R: -changeR, G: -changeG, B: changeB},
         {R: -changeR, G: -changeG, B: -changeB}
     ];
-    console.log('permutations:', permutations);
 
     const gradientResults = document.getElementById('gradientResults');
     gradientResults.innerHTML = '';
+
+    const calculationsDiv = document.createElement('div');
+    calculationsDiv.innerHTML = `
+        <h2>Calculations</h2>
+        <p><strong>1. Convert the starting color from hex format to RGB values:</strong> ${hexInput} to RGB(${r}, ${g}, ${b})</p>
+        <p><strong>2. Calculate the average RGB value:</strong> (R + G + B) / 3 = (${r} + ${g} + ${b}) / 3 = ${avgRgb}</p>
+        <p><strong>3. Calculate Base Change Value:</strong> Average RGB × Scaling Factor = ${avgRgb} × ${scalingFactor} = ${baseChangeValue}</p>
+        <p><strong>4. Calculate the dominance of each RGB component:</strong>
+            <br> Dominance of R = R / 255 = ${r} / 255 = ${dominanceR}
+            <br> Dominance of G = G / 255 = ${g} / 255 = ${dominanceG}
+            <br> Dominance of B = B / 255 = ${b} / 255 = ${dominanceB}
+        </p>
+        <p><strong>5. Calculate the inverse dominance of each RGB component:</strong>
+            <br> Inverse Dominance of R = 1 - Dominance of R = 1 - ${dominanceR} = ${inverseDominanceR}
+            <br> Inverse Dominance of G = 1 - Dominance of G = 1 - ${dominanceG} = ${inverseDominanceG}
+            <br> Inverse Dominance of B = 1 - Dominance of B = 1 - ${dominanceB} = ${inverseDominanceB}
+        </p>
+        <p><strong>6. Calculate the change in each RGB component:</strong>
+            <br> Change in R = Base Change Value × Inverse Dominance of R = ${baseChangeValue} × ${inverseDominanceR} = ${changeR}
+            <br> Change in G = Base Change Value × Inverse Dominance of G = ${baseChangeValue} × ${inverseDominanceG} = ${changeG}
+            <br> Change in B = Base Change Value × Inverse Dominance of B = ${baseChangeValue} × ${inverseDominanceB} = ${changeB}
+        </p>
+        <p><strong>7. Calculate the ending color for all 8 possible permutations:</strong></p>
+    `;
+
+    gradientResults.appendChild(calculationsDiv);
 
     permutations.forEach((perm, index) => {
         const endR = clamp(r + perm.R, 0, 255);
         const endG = clamp(g + perm.G, 0, 255);
         const endB = clamp(b + perm.B, 0, 255);
-        console.log('ending RGB values:', [endR, endG, endB]);
 
         const table = document.createElement('table');
         table.className = 'gradient-table';
@@ -117,8 +126,6 @@ function calculateGradients() {
         table.appendChild(body);
         gradientResults.appendChild(table);
     });
-
-    console.log('Gradients calculated and displayed.');
 }
 
 function clamp(value, min, max) {
