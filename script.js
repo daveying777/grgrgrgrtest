@@ -92,9 +92,9 @@ function calculateGradients() {
         gradientTextDiv.style.backgroundImage = gradientStyle;
         gradientTextDiv.style.webkitBackgroundClip = "text";
         gradientTextDiv.style.webkitTextFillColor = "transparent";
-        gradientTextDiv.style.fontSize = "50px";
+        gradientTextDiv.style.fontSize = "60px"; // Adjusted font size
         gradientTextDiv.style.fontWeight = "bold";
-        gradientTextDiv.textContent = `Permutation ${index + 1}: Gradient Example`;
+        gradientTextDiv.textContent = `Permutation ${index + 1}`;
         gradientResults.appendChild(gradientTextDiv);
 
         const table = document.createElement('table');
@@ -104,6 +104,7 @@ function calculateGradients() {
         header.innerHTML = `
             <tr>
                 <th>Percentage</th>
+                <th>Hex</th>
                 <th>R</th>
                 <th>G</th>
                 <th>B</th>
@@ -121,6 +122,8 @@ function calculateGradients() {
         const deltaG = (endG - g) / steps;
         const deltaB = (endB - b) / steps;
 
+        let previousR = r, previousG = g, previousB = b;
+
         for (let i = 0; i <= steps; i++) {
             const stepR = Math.round(r + deltaR * i);
             const stepG = Math.round(g + deltaG * i);
@@ -129,13 +132,18 @@ function calculateGradients() {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${Math.round(stepPercentage * i)}%</td>
+                <td>${hex}</td>
                 <td>${stepR}</td>
                 <td>${stepG}</td>
                 <td>${stepB}</td>
-                <td>${(deltaR * i).toFixed(2)}</td>
-                <td>${(deltaG * i).toFixed(2)}</td>
-                <td>${(deltaB * i).toFixed(2)}</td>`;
+                <td>${stepR - previousR}</td>
+                <td>${stepG - previousG}</td>
+                <td>${stepB - previousB}</td>`;
             body.appendChild(row);
+
+            previousR = stepR;
+            previousG = stepG;
+            previousB = stepB;
         }
 
         table.appendChild(body);
