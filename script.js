@@ -85,6 +85,16 @@ function calculateGradients() {
         const endG = clamp(g + perm.G, 0, 255);
         const endB = clamp(b + perm.B, 0, 255);
 
+        const gradientText = `
+            Permutation ${index + 1}: {'R': ${perm.R.toFixed(2)}, 'G': ${perm.G.toFixed(2)}, 'B': ${perm.B.toFixed(2)}}
+            Gradient: linear-gradient(to right, rgb(${r}, ${g}, ${b}), rgb(${endR}, ${endG}, ${endB}))
+        `;
+
+        const gradientTextDiv = document.createElement('div');
+        gradientTextDiv.className = 'gradient-text';
+        gradientTextDiv.textContent = gradientText;
+        gradientResults.appendChild(gradientTextDiv);
+
         const table = document.createElement('table');
         table.className = 'gradient-table';
 
