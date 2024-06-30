@@ -70,6 +70,7 @@ button:hover {
 .gradient-text {
     margin: 10px 0;
     font-weight: bold;
+    font-size: 37px;
     white-space: pre-wrap; /* Ensures the text retains line breaks and spaces */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
