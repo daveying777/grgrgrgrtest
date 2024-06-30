@@ -59,3 +59,8 @@ button:hover {
 .gradient-table th {
     background-color: #f4f4f4;
 }
+
+.gradient-text {
+    margin: 10px 0;
+    font-weight: bold;
+}
