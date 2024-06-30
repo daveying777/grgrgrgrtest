@@ -92,7 +92,7 @@ function calculateGradients() {
         gradientTextDiv.style.backgroundImage = gradientStyle;
         gradientTextDiv.style.webkitBackgroundClip = "text";
         gradientTextDiv.style.webkitTextFillColor = "transparent";
-        gradientTextDiv.style.fontSize = "24px";
+        gradientTextDiv.style.fontSize = "50px";
         gradientTextDiv.style.fontWeight = "bold";
         gradientTextDiv.textContent = `Permutation ${index + 1}: Gradient Example`;
         gradientResults.appendChild(gradientTextDiv);
