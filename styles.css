@@ -5,13 +5,25 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'SF Pro Display Bold';
+    src: url('fonts/SF-Pro-Display-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
 body {
-    font-family: 'SF Pro Display Semibold', Arial, sans-serif;
+    font-family: 'SF Pro Display Semibold';
     background-color: #f4f4f4;
     color: #333;
     margin: 0;
     padding: 20px;
-    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-y: auto; /* Ensure scrolling is enabled */
+    justify-content: center; /* Center the container vertically */
 }
 
 .container {
@@ -19,7 +31,11 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin: 20px 0; /* Add margin to prevent cutting off text at the top */
+    word-wrap: break-word; /* Ensure long words break and fit within the container */
+    text-align: center; /* Center align text inside the container */
 }
 
 label {
@@ -35,12 +51,14 @@ input {
 
 button {
     width: 100%;
-    padding: 10px;
+    padding: 15px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-family: 'SF Pro Display Bold';
+    font-size: 20px; /* Make the button text larger */
 }
 
 button:hover {
@@ -68,10 +86,27 @@ button:hover {
 }
 
 .gradient-text {
-    margin: 10px 0;
+    font-size: clamp(45px, 5vw, 45px); /* Scalable font size with min and max limits */
     font-weight: bold;
-    font-size: 37px;
-    white-space: pre-wrap; /* Ensures the text retains line breaks and spaces */
+    background: linear-gradient(90deg, 
+        #159dfe 0%, 
+        #1b98fd 10%, 
+        #318cfc 20%, 
+        #6677fe 30%, 
+        #a05dfc 40%, 
+        #c654d8 50%, 
+        #db56ae 60%, 
+        #ea5475 70%, 
+        #f55c4d 80%, 
+        #fc7736 90%, 
+        #f8a403 100%);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-align: center;
+    white-space: nowrap; /* Prevents text from breaking into multiple lines */
+    background-size: 100% 100%; /* Ensures the gradient covers the entire text */
+    margin: 0 auto; /* Center align the text container */
+    display: inline-block; /* Ensure proper scaling and alignment */
 }
