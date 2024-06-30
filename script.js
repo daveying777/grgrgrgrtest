@@ -85,10 +85,20 @@ function calculateGradients() {
         const endG = clamp(g + perm.G, 0, 255);
         const endB = clamp(b + perm.B, 0, 255);
 
-        const gradientText = `
-            Permutation ${index + 1}: {'R': ${perm.R.toFixed(2)}, 'G': ${perm.G.toFixed(2)}, 'B': ${perm.B.toFixed(2)}}
-            Gradient: linear-gradient(to right, rgb(${r}, ${g}, ${b}), rgb(${endR}, ${endG}, ${endB}))
-        `;
+        let gradientText = `Permutation ${index + 1}: {'R': ${perm.R.toFixed(2)}, 'G': ${perm.G.toFixed(2)}, 'B': ${perm.B.toFixed(2)}}\nGradient steps:\n`;
+        const steps = 7;
+        const stepPercentage = 100 / steps;
+        const deltaR = (endR - r) / steps;
+        const deltaG = (endG - g) / steps;
+        const deltaB = (endB - b) / steps;
+
+        for (let i = 0; i <= steps; i++) {
+            const stepR = Math.round(r + deltaR * i);
+            const stepG = Math.round(g + deltaG * i);
+            const stepB = Math.round(b + deltaB * i);
+            const hex = rgbToHex(stepR, stepG, stepB);
+            gradientText += `${Math.round(stepPercentage * i)}% ${hex} | RGB(${stepR}, ${stepG}, ${stepB})\n`;
+        }
 
         const gradientTextDiv = document.createElement('div');
         gradientTextDiv.className = 'gradient-text';
@@ -112,12 +122,6 @@ function calculateGradients() {
         table.appendChild(header);
 
         const body = document.createElement('tbody');
-
-        const steps = 7;
-        const stepPercentage = 100 / steps;
-        const deltaR = (endR - r) / steps;
-        const deltaG = (endG - g) / steps;
-        const deltaB = (endB - b) / steps;
 
         for (let i = 0; i <= steps; i++) {
             const stepR = Math.round(r + deltaR * i);
