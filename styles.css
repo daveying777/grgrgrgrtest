@@ -63,4 +63,5 @@ button:hover {
 .gradient-text {
     margin: 10px 0;
     font-weight: bold;
+    white-space: pre-wrap; /* Ensures the text retains line breaks and spaces */
 }
