@@ -75,6 +75,11 @@ function calculateGradients() {
         const gradientDiv = document.createElement('div');
         gradientDiv.className = 'gradient';
         gradientDiv.style.background = `linear-gradient(to right, rgb(${r},${g},${b}), rgb(${endR},${endG},${endB}))`;
+
+        const label = document.createElement('div');
+        label.textContent = `Permutation ${index + 1}`;
+
+        gradientResults.appendChild(label);
         gradientResults.appendChild(gradientDiv);
         
         console.log(`Gradient ${index + 1} added with background: linear-gradient(to right, rgb(${r},${g},${b}), rgb(${endR},${endG},${endB}))`);
