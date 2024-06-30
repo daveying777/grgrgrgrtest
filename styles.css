@@ -1,5 +1,12 @@
+@font-face {
+    font-family: 'SF Pro Display Semibold';
+    src: url('fonts/SF-Pro-Display-Semibold.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'SF Pro Display Semibold', Arial, sans-serif;
     background-color: #f4f4f4;
     color: #333;
     margin: 0;
@@ -64,4 +71,6 @@ button:hover {
     margin: 10px 0;
     font-weight: bold;
     white-space: pre-wrap; /* Ensures the text retains line breaks and spaces */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
