@@ -16,6 +16,10 @@ function hexToRgb(hex) {
     return [r, g, b];
 }
 
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+}
+
 function calculateGradients() {
     console.log('calculateGradients called');
     const hexInput = document.getElementById('hexInput').value;
@@ -52,14 +56,14 @@ function calculateGradients() {
     console.log('change values:', [changeR, changeG, changeB]);
 
     const permutations = [
-        [changeR, changeG, changeB],
-        [changeR, changeG, -changeB],
-        [changeR, -changeG, changeB],
-        [changeR, -changeG, -changeB],
-        [-changeR, changeG, changeB],
-        [-changeR, changeG, -changeB],
-        [-changeR, -changeG, changeB],
-        [-changeR, -changeG, -changeB]
+        {R: changeR, G: changeG, B: changeB},
+        {R: changeR, G: changeG, B: -changeB},
+        {R: changeR, G: -changeG, B: changeB},
+        {R: changeR, G: -changeG, B: -changeB},
+        {R: -changeR, G: changeG, B: changeB},
+        {R: -changeR, G: changeG, B: -changeB},
+        {R: -changeR, G: -changeG, B: changeB},
+        {R: -changeR, G: -changeG, B: -changeB}
     ];
     console.log('permutations:', permutations);
 
@@ -67,22 +71,51 @@ function calculateGradients() {
     gradientResults.innerHTML = '';
 
     permutations.forEach((perm, index) => {
-        const endR = clamp(r + perm[0], 0, 255);
-        const endG = clamp(g + perm[1], 0, 255);
-        const endB = clamp(b + perm[2], 0, 255);
+        const endR = clamp(r + perm.R, 0, 255);
+        const endG = clamp(g + perm.G, 0, 255);
+        const endB = clamp(b + perm.B, 0, 255);
         console.log('ending RGB values:', [endR, endG, endB]);
 
-        const gradientDiv = document.createElement('div');
-        gradientDiv.className = 'gradient';
-        gradientDiv.style.background = `linear-gradient(to right, rgb(${r},${g},${b}), rgb(${endR},${endG},${endB}))`;
+        const table = document.createElement('table');
+        table.className = 'gradient-table';
 
-        const label = document.createElement('div');
-        label.textContent = `Permutation ${index + 1}`;
+        const header = document.createElement('thead');
+        header.innerHTML = `
+            <tr>
+                <th colspan="4">Permutation ${index + 1}: {'R': ${perm.R.toFixed(2)}, 'G': ${perm.G.toFixed(2)}, 'B': ${perm.B.toFixed(2)}}</th>
+            </tr>
+            <tr>
+                <th>Percentage</th>
+                <th>Hex</th>
+                <th>R G B</th>
+                <th>ΔR ΔG ΔB</th>
+            </tr>`;
+        table.appendChild(header);
 
-        gradientResults.appendChild(label);
-        gradientResults.appendChild(gradientDiv);
-        
-        console.log(`Gradient ${index + 1} added with background: linear-gradient(to right, rgb(${r},${g},${b}), rgb(${endR},${endG},${endB}))`);
+        const body = document.createElement('tbody');
+
+        const steps = 7;
+        const stepPercentage = 100 / steps;
+        const deltaR = (endR - r) / steps;
+        const deltaG = (endG - g) / steps;
+        const deltaB = (endB - b) / steps;
+
+        for (let i = 0; i <= steps; i++) {
+            const stepR = Math.round(r + deltaR * i);
+            const stepG = Math.round(g + deltaG * i);
+            const stepB = Math.round(b + deltaB * i);
+            const hex = rgbToHex(stepR, stepG, stepB);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${Math.round(stepPercentage * i)}%</td>
+                <td>${hex}</td>
+                <td>${stepR} ${stepG} ${stepB}</td>
+                <td>${(deltaR * i).toFixed(2)} ${(deltaG * i).toFixed(2)} ${(deltaB * i).toFixed(2)}</td>`;
+            body.appendChild(row);
+        }
+
+        table.appendChild(body);
+        gradientResults.appendChild(table);
     });
 
     console.log('Gradients calculated and displayed.');
